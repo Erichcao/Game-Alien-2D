@@ -22,18 +22,19 @@ class DescontoNormal(IDesconto):
         return valor * 0.1  # 10% de desconto
 
 
-class DescontoVIP(IDesconto, ICupom, IVIP):
+class DescontoVIP(IDesconto):
     def calcular(self, valor):
         return valor * 0.2  # 20% de desconto
-    def aplicar_cupom(self, codigo):
-        return True
-    def validar_usuario_vip(self, usuario):
-        return usuario == "vip"
 
 class DescontoPremium(Desconto):
     def calcular(self, valor):
         return valor * 0.3  # 30% de desconto
-    
+
+class Pedido:
+    def __init__(self, desconto: IDesconto):
+        self.desconto = desconto
+    def total   (self, valor):
+        return valor - self.desconto.calcular(valor)
 def aplicar_desconto(desconto: Desconto, valor: float)-> float:
     return desconto.calcular(valor)
 
@@ -43,12 +44,12 @@ def aplicar_cupom(cupom: ICupom, codigo: str) -> bool:
 if __name__ == "__main__":
     valor = 100  # Valor original do produto
 
-    normal = DescontoNormal()
-    vip = DescontoVIP()
+    pedido_normal = Pedido(DescontoNormal())
+    pedido_vip = Pedido(DescontoVIP())
+    
 
-print("Desconto Normal:", aplicar_desconto(normal, valor))
-print("Desconto VIP:", aplicar_desconto(vip, valor))
+print("Normal:", pedido_normal.total(valor))  # Saída: Normal: 90.0
+print("VIP:", pedido_vip.total(valor))  # Saída: VIP: 80.0
 
-print("Cupom VIP:", aplicar_cupom("DESC10"))
 
 
