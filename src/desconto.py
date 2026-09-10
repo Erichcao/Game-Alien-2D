@@ -35,6 +35,7 @@ class Pedido:
         self.desconto = desconto
     def total   (self, valor):
         return valor - self.desconto.calcular(valor)
+    
 def aplicar_desconto(desconto: Desconto, valor: float)-> float:
     return desconto.calcular(valor)
 
@@ -48,8 +49,8 @@ if __name__ == "__main__":
     pedido_vip = Pedido(DescontoVIP())
     
 
-print("Normal:", pedido_normal.total(valor))  # Saída: Normal: 90.0
-print("VIP:", pedido_vip.total(valor))  # Saída: VIP: 80.0
+    print("Normal:", pedido_normal.total(valor))  # Saída: Normal: 90.0
+    print("VIP:", pedido_vip.total(valor))  # Saída: VIP: 80.0
 
 
 
