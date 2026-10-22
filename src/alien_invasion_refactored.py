@@ -1,4 +1,6 @@
 import sys
+sys.path.append(".")  # Adiciona a raiz atual ao caminho de busca do Python
+
 import pygame
 
 from fast_alien import FastAlien
