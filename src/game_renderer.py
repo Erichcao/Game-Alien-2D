@@ -1,11 +1,9 @@
 import pygame
-import sys
-
-
 
 
 class GameRenderer:
     """Responsável por desenhar os elementos do jogo na tela."""
+
     def __init__(self, screen, bg_color, ship, bullets, aliens) -> None:
         self.screen = screen
         self.bg_color = bg_color

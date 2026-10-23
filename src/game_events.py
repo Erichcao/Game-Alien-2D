@@ -1,15 +1,16 @@
 import sys
-import pygame
 
+import pygame
 
 
 class GameEventHandler:
     """Responsável apenar por ler e tratar os eventos do teclado/janela."""
+
     def __init__(self, ship, bullet_manager) -> None:
         self.ship = ship
         self.bullet_manager = bullet_manager
 
-    #Vou pegar todos os métodos de eventos e colocar aqui, e depois chamar esse método no loop principal do jogo.
+    # Vou pegar todos os métodos de eventos e colocar aqui, e depois chamar esse método no loop principal do jogo.
     def _check_events(self):
         """Responde a eventos de pressionamento de teclas e mouse (fechamento da janela)."""
         for event in pygame.event.get():
