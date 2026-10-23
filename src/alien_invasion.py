@@ -1,19 +1,21 @@
-import sys 
+import sys
+
 import pygame
 
+from alien import Alien
+from bullet import Bullet
 from settings import Settings
 from ship import Ship
-from bullet import Bullet
-from alien import Alien
 
 
 class GameEventHandler:
     """Responsável apenar por ler e tratar os eventos do teclado/janela."""
+
     def __init__(self, ship, bullet_manager) -> None:
         self.ship = ship
         self.bullet_manager = bullet_manager
 
-    #Vou pegar todos os métodos de eventos e colocar aqui, e depois chamar esse método no loop principal do jogo.
+    # Vou pegar todos os métodos de eventos e colocar aqui, e depois chamar esse método no loop principal do jogo.
     def _check_events(self):
         """Responde a eventos de pressionamento de teclas e mouse (fechamento da janela)."""
         for event in pygame.event.get():
@@ -40,8 +42,10 @@ class GameEventHandler:
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
 
+
 class BulletManager:
     """Responsável apenas por criar, atualizar e desenhar os projéteis"""
+
     def __init__(self, screen, settings, ship) -> None:
         self.screen = screen
         self.settings = settings
@@ -70,13 +74,15 @@ class BulletManager:
         """Verifica colisões entre projéteis e alienígenas."""
         pygame.sprite.groupcollide(self.bullets, aliens, True, True)
 
+
 class FleetManager:
     """Responsável por criar e gerenciar a frota de alienígenas."""
+
     def __init__(self, screen, settings, ship) -> None:
-            self.screen = screen
-            self.settings = settings
-            self.ship = ship
-            self.aliens = pygame.sprite.Group()
+        self.screen = screen
+        self.settings = settings
+        self.ship = ship
+        self.aliens = pygame.sprite.Group()
 
     def create_fleet(self):
         """Cria uma frota de alienígenas."""
@@ -88,9 +94,11 @@ class FleetManager:
         available_space_x = self.settings.screen_width - (2 * alien_width)
         number_aliens_x = available_space_x // (2 * alien_width)
         ship_height = self.ship.rect.height
-        available_space_y = self.settings.screen_height - (3 * alien_height) - ship_height
+        available_space_y = (
+            self.settings.screen_height - (3 * alien_height) - ship_height
+        )
         number_rows = available_space_y // (2 * alien_height)
-        
+
         for row_number in range(number_rows):
             # Cria a primeira linha de alienígenas
             for alien_number in range(number_aliens_x):
@@ -127,8 +135,10 @@ class FleetManager:
             print("A nave foi atingida!")
             sys.exit()
 
+
 class GameRenderer:
     """Responsável por desenhar os elementos do jogo na tela."""
+
     def __init__(self, screen, bg_color, ship, bullets, aliens) -> None:
         self.screen = screen
         self.bg_color = bg_color
@@ -149,6 +159,7 @@ class GameRenderer:
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
 
+
 class AlienInvasion:
     """Gerencia o jogo e seus comportamentos."""
 
@@ -157,26 +168,34 @@ class AlienInvasion:
         pygame.init()
         self.settings = Settings()
 
-        self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
+        self.screen = pygame.display.set_mode(
+            (self.settings.screen_width, self.settings.screen_height)
+        )
         pygame.display.set_caption("Alien Invasion")
-        
+
         # Criando uma instância da classe Ship para representar a nave espacial
         self.ship = Ship(self.screen, self.settings)
-        
+
         # Mudando a cor do plano de fundo em RGB
-        self.bg_color = (self.settings.bg_color)
-        
+        self.bg_color = self.settings.bg_color
+
         self.bullet_manager = BulletManager(self.screen, self.settings, self.ship)
         self.fleet_manager = FleetManager(self.screen, self.settings, self.ship)
         self.event_handler = GameEventHandler(self.ship, self.bullet_manager)
-        self.renderer = GameRenderer(self.screen, self.bg_color, self.ship, self.bullet_manager.bullets, self.fleet_manager.aliens)
+        self.renderer = GameRenderer(
+            self.screen,
+            self.bg_color,
+            self.ship,
+            self.bullet_manager.bullets,
+            self.fleet_manager.aliens,
+        )
 
     def _update_game_state(self) -> None:
         """Atualiza a posição da nave, dos projéteis e dos alienígenas."""
         self.ship.update()
         self.bullet_manager._update_bullets(self.fleet_manager.aliens)
         self.fleet_manager._update_aliens()
-            
+
     def run_game(self):
         """Cria um laço de repetição para a tela sempre ficar visível até
         que o usuário decida fechar a janela."""
@@ -188,6 +207,7 @@ class AlienInvasion:
             self._update_game_state()
             self.renderer._render_screen()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     alien_invasion = AlienInvasion()
     alien_invasion.run_game()

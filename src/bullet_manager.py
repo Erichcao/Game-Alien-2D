@@ -1,14 +1,11 @@
 import pygame
-import sys
+
 from bullet import Bullet
-
-
-
-
 
 
 class BulletManager:
     """Responsável apenas por criar, atualizar e desenhar os projéteis"""
+
     def __init__(self, screen, settings, ship) -> None:
         self.screen = screen
         self.settings = settings
